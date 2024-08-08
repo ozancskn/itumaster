@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Dishes at {{ restaurant.Restaurantname }}</h3>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<h3>Dishes at {{ restaurant.Restaurantname }}</h3>
+
+<hr>
+{% if dishes %}
+    <ul>
+    {% for dish in dishes %}
+        <li>
+            {{ dish.Name }} - {{ dish.Description }} - ${{ "%.2f"|format(dish.Price) }}
+            <br>
+            Preparation Time: {{ dish.PreparationTime }} minutes
+            <form action="{{ url_for('add_to_cart') }}" method="post" style="display: inline;">
+                <input type="hidden" name="dish_id" value="{{ dish.Id }}">
+                <input type="hidden" name="restaurant_id" value="{{ restaurant.Id }}">
+                <button type="submit">Sepete Ekle</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No dishes found for this restaurant.</p>
+{% endif %}
+<hr>
+
+<a href="{{ url_for('category_restaurants', category_id=restaurant.RestaurantCategory) }}">Back to Restaurants</a>
+<a href="{{ url_for('view_cart') }}" class="btn btn-info">Sepeti Görüntüle</a>
+
+{% endblock body %}

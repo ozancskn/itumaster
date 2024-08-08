@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>{{ restaurant.RestaurantName }} - Menüye Yemek Ekle</h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST">
+    <div class="form-group">
+        <label for="name">Yemek Adı:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Açıklama:</label>
+        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Fiyat:</label>
+        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+        <label for="prep_time">Hazırlama Süresi (dakika):</label>
+        <input type="number" class="form-control" id="prep_time" name="prep_time" required>
+    </div>
+
+    <div class="form-group">
+        <label for="delivery_range">Teslimat Mesafesi:</label>
+        <input type="number" class="form-control" id="delivery_range" name="delivery_range" required>
+    </div>
+
+    <div class="form-group">
+        <label for="restaurant_menu">Restoran Menüsü:</label>
+        <select class="form-control" id="restaurant_menu" name="restaurant_menu" required>
+            {% for menu in restaurant_menus %}
+                <option value="{{ menu.Id }}">{{ menu.Name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="menu_category">Menü Kategorisi:</label>
+        <select class="form-control" id="menu_category" name="menu_category" required>
+            {% for category in menu_categories %}
+                <option value="{{ category.Id }}">{{ category.Name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Yemek Ekle</button>
+</form>
+
+{% endblock body %}

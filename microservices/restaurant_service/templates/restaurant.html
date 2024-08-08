@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Yeni Restoran Ekle</h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('register_service') }}">
+    <div class="form-group">
+        <label for="name">Restoran Adı:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="address">Adres:</label>
+        <input type="text" class="form-control" id="address" name="address" required>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Kategori:</label>
+        <select class="form-control" id="category" name="category" required>
+            <option value="">Kategori Seçin</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.CategoryName }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+<hr>
+
+{% if restaurants %}
+<h3>Mevcut Restoranlar</h3>
+<ul class="list-group">
+    {% for restaurant in restaurants %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ restaurant.RestaurantName }}
+        <a href="{{ url_for('restaurant_menu', restaurant_id=restaurant.id) }}" class="btn btn-secondary btn-sm">Yemek Ekle</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock body %}

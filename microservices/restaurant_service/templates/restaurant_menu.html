@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>{{ restaurant.RestaurantName }} - Menü</h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<h4>Yemek Ekle</h4>
+<form method="POST" action="{{ url_for('restaurant_menu', restaurant_id=restaurant.id) }}">
+    <div class="form-group">
+        <label for="name">Yemek Adı:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Açıklama:</label>
+        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Fiyat:</label>
+        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+        <label for="prep_time">Hazırlama Süresi (dakika):</label>
+        <input type="number" class="form-control" id="prep_time" name="prep_time" required>
+    </div>
+
+    <div class="form-group">
+        <label for="delivery_range">Teslimat Mesafesi:</label>
+        <input type="number" class="form-control" id="delivery_range" name="delivery_range" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Yemek Ekle</button>
+</form>
+
+<hr>
+
+<h4>Mevcut Yemekler</h4>
+{% if dishes %}
+<ul class="list-group">
+    {% for dish in dishes %}
+    <li class="list-group-item">
+        <h5>{{ dish.Name }}</h5>
+        <p>{{ dish.Description }}</p>
+        <p>Fiyat: {{ dish.Price }} TL</p>
+        <p>Hazırlama Süresi: {{ dish.PreparationTime }} dakika</p>
+        <p>Teslimat Mesafesi: {{ dish.DeliveryRange }} km</p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Henüz yemek eklenmemiş.</p>
+{% endif %}
+
+{% endblock body %}

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>Sepetiniz</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% if cart %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>${{ "%.2f"|format(item.price) }}</td>
+                <td>
+                    <form action="{{ url_for('remove_from_cart') }}" method="post">
+                        <input type="hidden" name="item_index" value="{{ loop.index0 }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Kaldır</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p><strong>Toplam: ${{ "%.2f"|format(total) }}</strong></p>
+    <a href="{{ url_for('checkout') }}" class="btn btn-primary">Siparişi Tamamla</a>
+{% else %}
+    <p>Sepetiniz boş.</p>
+{% endif %}
+
+<a href="{{ url_for('order_service') }}" class="btn btn-secondary">Alışverişe Devam Et</a>
+
+{% endblock %}

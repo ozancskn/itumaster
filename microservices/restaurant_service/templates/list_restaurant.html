@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Restoranlar</h3>
+
+<ul class="list-group">
+    {% for restaurant in restaurants %}
+    <li class="list-group-item">
+        <a href="{{ url_for('restaurant_menu', restaurant_id=restaurant.id) }}">
+            {{ restaurant.RestaurantName }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock body %}
